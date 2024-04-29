@@ -18,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Sanitize input data
         $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
+        // Hash the password for security
+        $password = password_hash(mysqli_real_escape_string($conn, $_POST['password']), PASSWORD_DEFAULT);
         // Serialize the array of PIN inputs into a string
         $pin = implode('', array_map('intval', $_POST['pin']));
 
@@ -38,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close database connection
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
