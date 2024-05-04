@@ -1,0 +1,149 @@
+        /* Common styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f7ff; /* Default background color */
+            transition: background-color 0.3s, color 0.3s; /* Include color transition */
+            color: #333; /* Default text color */ 
+            padding-top:80px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%; /* Ensure the navbar spans the full width */
+            background-color: #3cb371;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            z-index: 1000; /* Set z-index to ensure it's above other content */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .search-bar {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon {
+            color: #3cb371;
+            margin-right: 5px;
+        }
+
+        .search-bar input[type="text"] {
+            border: none;
+            outline: none;
+            background: none;
+            padding: 5px;
+            margin-left: 5px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-left: auto;
+            text-align: right;
+            position: relative; /* Add position relative */
+        }
+
+        .user-details {
+            display: flex;
+            align-items: center;
+            cursor: pointer; /* Add cursor pointer */
+        }
+
+        .user-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #3cb371;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            margin-right: 10px;
+            margin-top: 10px; /* Adjusted margin */
+        }
+
+        .user-email {
+            margin-right: 20px;
+        }
+
+        .user-position {
+            margin-right: 50px;
+            margin-top: -10px;
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 10px); /* Add some space */
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            display: none;
+            margin-right:40px;
+        }
+
+        .dropdown a {
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /* Notification icon */
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px; /* Increase font size of the icon */
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px; /* Adjust the positioning if needed */
+            right: -8px; /* Adjust the positioning if needed */
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 8px; /* Increase padding for larger size */
+            font-size: 10px; /* Increase font size for larger size */
+        }
+         /*Navbar ends*/
+
+        
