@@ -1,0 +1,85 @@
+ /* Dashboard container */
+ .dashboard {
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Center the items vertically */
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+}
+
+/* Individual card */
+.card {
+    background-color: #fff;
+    padding: 10px; /* Decrease padding */
+    margin: 10px; /* Add some space between cards */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card:hover {
+    background-color: #f2f2f2;
+}
+
+.card a {
+    text-decoration: none; /* Remove underline */
+    font-size: 12px; /* Decrease font size */
+    display:block;
+}
+
+.card.active {
+
+    background-color: #beead1; /* Change background color for active page */
+    color: #fff; /* Change text color for active page */
+}
+
+/* Styles for the left navbar */
+.navbar {
+    width: 200px; /* Set the width of the navbar */
+    height: 100vh; /* Make the navbar full height */
+    background-color: #3cb371; /* Set the background color */
+    padding-top: 60px; /* Adjust the top padding to accommodate the header */
+    position: fixed; /* Fix the navbar position */
+    top: 80px; /* Position it at the top */
+    left: 0; /* Position it at the left */
+    font-family: 'Roboto', sans-serif; /* Use Roboto font */
+}
+
+.navbar ul {
+    list-style-type: none; /* Remove list bullet points */
+    margin: 0;
+}
+
+.navbar li {
+    padding: 10px 0;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+    background-color: #2e8b57; /* Change background color on hover */
+}
+
+.sub-menu {
+    display: none;
+    padding-left: 20px; /* Indent sub-menu items */
+}
+
+.sub-menu a {
+    padding: 5px;
+}
+
+.navbar li:hover .sub-menu {
+    display: block; /* Show sub-menu on hover */
+}
+
+ /* Make main point fonts bolder */
+.navbar li > a {
+    font-weight: bold;
+}
