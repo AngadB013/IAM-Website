@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['email'])) {
+        header("Location: ../login/itlogin.php");
+        exit();
+    }
+?>
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,66 +13,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IAM System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e6f7ff;
-        }
-
-        header {
-            background-color: #3cb371;
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-container input[type="text"] {
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-
-        .search-container .search-icon {
-            color: #3cb371;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            margin-left: 10px;
-        }
-
-        .dashboard {
+    <link rel="stylesheet" href="navbar.css"/>
+</head>
+<style>
+     .dashboard {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
         }
-
+        
         .card {
             background-color: #fff;
             padding: 20px;
@@ -76,20 +34,18 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+        
         .card:hover {
             background-color: #f2f2f2;
         }
-    </style>
-</head>
+        
+        .card a {
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Inherit text color */
+        }
+        
+</style>
 <body>
-    <?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header("Location: ../login/itlogin.php");
-        exit();
-    }
-    ?>
 
     <header>
         <div class="logo-container">
@@ -97,31 +53,65 @@
             <h1>IAM System</h1>
         </div>
         <div class="search-container">
-            <input type="text" placeholder="Search">
-            <i class="fas fa-search search-icon"></i>
+             <!-- Notification icon -->
+             <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Search">
+            </div>
             <div class="user-info">
-                <div><?php echo $_SESSION['email']; ?></div>
-                <div>IT Admin</div>
+                <div class="user-details" id="userDropdown">
+                    <span class="user-circle"><?php echo getUserInitials($_SESSION['email']); ?></span>
+                    <div class="user-email"><?php echo $_SESSION['email']; ?></div>
+                </div>
+                <div class="user-position">IT Admin</div>
+                <!-- Dropdown menu -->
+                <div class="dropdown" id="dropdownMenu">
+                    <a href="index.html">Logout</a>
+                </div>
             </div>
         </div>
     </header>
 
+    <?php
+    function getUserInitials($email) {
+        $name_parts = explode('@', $email);
+        $initials = '';
+        foreach (explode('.', $name_parts[0]) as $part) {
+            $initials .= strtoupper($part[0]);
+        }
+        return $initials;
+    }
+    ?>
+
+    <script>
+        document.getElementById("userDropdown").addEventListener("click", function() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+        });
+    </script>
+
+    <!--Navbar ends-->
     <div class="dashboard">
         <div class="card">
-            <h3>Visitor access</h3>
+            <a href="userauth.php"><h3>Visitor access</h3></a>
         </div>
         <div class="card">
-            <h3>User Authentication</h3>
+            <a href="user_authentication/userauth.php"><h3>User Authentication</h3></a>
         </div>
         <div class="card">
-            <h3>Authorisation</h3>
+            <a href="http://localhost/phpmyadmin/index.php?route=/server/privileges&db=aged_care_db&checkprivsdb=aged_care_db&viewing_mode=db"><h3>Authorisation</h3></a>
         </div>
         <div class="card">
-            <h3>Caregiver access</h3>
+            <a href="userauth.php"><h3>Caregiver access</h3></a>
         </div>
         <div class="card">
-            <h3>Threat Monitoring and Response</h3>
+            <a href="userauth.php"><h3>Threat Monitoring and Response</h3></a>
         </div>
     </div>
+
 </body>
 </html>
