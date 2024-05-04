@@ -3,7 +3,7 @@
 session_start();
 
 // Create connection
-$conn = mysqli_connect("localhost", "root", "", "103166497_db");
+$conn = mysqli_connect("localhost", "root", "", "aged_care_db");
 
 // Check connection
 if ($conn->connect_error) {
