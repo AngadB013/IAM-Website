@@ -98,7 +98,7 @@
                     <li><a href="adduser.php">Add Users</a></li>
                     <li><a href="removeuser.php">Remove Users</a></li>
                     <li><a href="resetuser.php">Reset Password</a></li>
-                    <li><a href="#">Access</a></li>
+                    <li><a href="mfa.php">MFA Access</a></li>
                 </ul>
             </li>
             <li><a href="#">Settings</a></li>
