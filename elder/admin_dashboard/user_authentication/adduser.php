@@ -1,64 +1,81 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header("Location: ../login/itlogin.php");
-        exit();
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: ../login/itlogin.php");
+    exit();
+}
+
+// Initialize variables for form fields
+$name = $email = $department = $position = $phone_number = $password = $confirm_password = "";
+$phone_number_error = "";
+
+// Define arrays for dropdown options
+$departments = array("Finance", "Medical", "Human Resources", "IT", "Operations");
+
+// Validation and processing on form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate and sanitize form inputs
+    $name = htmlspecialchars($_POST["name"]);
+    $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+    $department = htmlspecialchars($_POST["department"]);
+    $position = htmlspecialchars($_POST["position"]);
+    $phone_number = htmlspecialchars($_POST["phone_number"]);
+    $password = $_POST["password"];
+    $confirm_password = $_POST["confirm_password"];
+
+    // Validate phone number format
+    if (!preg_match("/^\+\d{1,3}\d{9,}$/", $phone_number)) {
+        $phone_number_error = "Please enter a valid phone number with country code.";
     }
 
-    // Initialize variables for form fields
-    $name = $email = $department = $position = $phone_number = $password = $confirm_password = "";
-    $phone_number_error = "";
+    // Perform additional validation if needed
 
-    // Define arrays for dropdown options
-    $departments = array("Finance", "Medical", "Human Resources", "IT", "Operations");
+    // If all fields are valid, proceed to add user to the database
+    if ($email && $password && $confirm_password && $password === $confirm_password && empty($phone_number_error)) {
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Validation and processing on form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Validate and sanitize form inputs
-        $name = htmlspecialchars($_POST["name"]);
-        $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
-        $department = htmlspecialchars($_POST["department"]);
-        $position = htmlspecialchars($_POST["position"]);
-        $phone_number = htmlspecialchars($_POST["phone_number"]);
-        $password = $_POST["password"];
-        $confirm_password = $_POST["confirm_password"];
+        // Establish connection
+        $conn = mysqli_connect("localhost", "root", "", "aged_care_db");
 
-        // Validate phone number format
-        if (!preg_match("/^\+\d{1,3}\d{9,}$/", $phone_number)) {
-            $phone_number_error = "Please enter a valid phone number with country code.";
+        // Check connection
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Perform additional validation if needed
+        // Insert user data into the carestaff table
+        $sql = "INSERT INTO carestaff (name, email, department, position, phone_number, password)
+                VALUES ('$name', '$email', '$department', '$position', '$phone_number', '$hashed_password')";
 
-        // If all fields are valid, proceed to add user to the database
-        if ($email && $password && $confirm_password && $password === $confirm_password && empty($phone_number_error)) {
-            // Hash the password
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        if (mysqli_query($conn, $sql)) {
+            // Log the action to text file
+            $log_file = "log.txt";
+            $log_entry = date("Y-m-d H:i:s") . " - New user added: " . $name . " (" . $email . ") in department " . $department . " by " . $_SESSION['email'] . "\n";
+            file_put_contents($log_file, $log_entry, FILE_APPEND);
 
-            // Establish connection
-            $conn = mysqli_connect("localhost", "root", "", "aged_care_db");
+            // Log the action to database
+            $action_description = "New user added: " . $name . " (" . $email . ") in department " . $department;
+            $user_email = $_SESSION['email'];
 
-            // Check connection
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
+            $sql = "INSERT INTO log_entries (action_description, user_email) VALUES (?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
 
-            // Insert user data into the carestaff table
-            $sql = "INSERT INTO carestaff (name, email, department, position, phone_number, password)
-                    VALUES ('$name', '$email', '$department', '$position', '$phone_number', '$hashed_password')";
+            mysqli_stmt_bind_param($stmt, "ss", $action_description, $user_email);
+            mysqli_stmt_execute($stmt);
 
-            if (mysqli_query($conn, $sql)) {
-                echo "User added successfully.";
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
+            mysqli_stmt_close($stmt);
 
-            // Close connection
-            mysqli_close($conn);
+            echo "User added successfully.";
         } else {
-            echo "Please fill.";
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
+
+        // Close connection
+        mysqli_close($conn);
+    } else {
+        echo "Please fill.";
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -135,10 +152,9 @@
         }
 
         .success-message {
-            color: #007bff;
-            margin-top: 5px;
+            color: #28a745; /* Green color */
+            font-size: 16px;
         }
-    
 </style>
 <body>
     <header>
@@ -213,7 +229,7 @@
                     <li><a href="adduser.php">Add Users</a></li>
                     <li><a href="removeuser.php">Remove Users</a></li>
                     <li><a href="resetuser.php">Reset Password</a></li>
-                    <li><a href="#">Access</a></li>
+                    <li><a href="mfa.php">MFA Access</a></li>
                 </ul>
             </li>
             <li><a href="#">Settings</a></li>
@@ -224,6 +240,10 @@
    <!-- Form for adding users -->
     <div class="container">
         <h2>Add User</h2>
+            <!-- Success message -->
+            <?php if (isset($success_message)) : ?>
+                <div class="success-message"><?php echo $success_message; ?></div>
+            <?php endif; ?>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return validateForm()">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
@@ -237,7 +257,6 @@
                 <option value="Finance">Finance</option>
                 <option value="Medical">Medical</option>
                 <option value="Human Resources">Human Resources</option>
-                <option value="IT">IT</option>
                 <option value="Operations">Operations</option>
             </select>
             
@@ -256,6 +275,7 @@
             <input type="password" id="confirm_password" name="confirm_password" required>
             
             <input type="submit" value="Add User">
+
         </form>
     </div>
 
@@ -274,7 +294,6 @@
         }
         return true;
         }
-
         
         function validateForm() {
             var isValid = true;
