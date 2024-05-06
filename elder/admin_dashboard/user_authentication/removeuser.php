@@ -21,7 +21,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_user'])) {
     $sql = "DELETE FROM carestaff WHERE id = $user_id";
 
     if (mysqli_query($conn, $sql)) {
-        $success_message = "User removed successfully.";
+        // Log the action to the database
+        $action_description = "User removed with ID: " . $user_id;
+        $user_email = $_SESSION['email'];
+        $action_time = date("Y-m-d H:i:s");
+        
+        $log_sql = "INSERT INTO log_entries (action_time, action_description, user_email) VALUES ('$action_time', '$action_description', '$user_email')";
+        
+        if (mysqli_query($conn, $log_sql)) {
+            $success_message = "User removed successfully.";
+        } else {
+            $error_message = "Error logging user removal: " . mysqli_error($conn);
+        }
+
+                // Log the action to text file
+                $log_file = "log.txt";
+                $log_entry = date("Y-m-d H:i:s") . " - " . $action_description . " by " . $_SESSION['email'] . "\n";
+                file_put_contents($log_file, $log_entry, FILE_APPEND);
+                
     } else {
         $error_message = "Error removing user: " . mysqli_error($conn);
     }
@@ -196,7 +213,7 @@ mysqli_close($conn);
                     <li><a href="adduser.php">Add Users</a></li>
                     <li><a href="removeuser.php">Remove Users</a></li>
                     <li><a href="resetuser.php">Reset Password</a></li>
-                    <li><a href="#">Access</a></li>
+                    <li><a href="mfa.php">MFA Access</a></li>
                 </ul>
             </li>
             <li><a href="#">Settings</a></li>
