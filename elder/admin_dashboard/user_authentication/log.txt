@@ -1,0 +1,8 @@
+2024-05-04 16:27:36 - New user added: Tony Sparkle (tony.sparkle@agecare.com)
+2024-05-04 16:40:45 - New user added: Tony Sparkle (tony.sparkle@agecare.com) in department Medical by admin@admin.com
+2024-05-04 16:51:28 - New user added: Sophia Ferguson (sophia.ferguson@agecare.com) in department Finance by admin@admin.com
+2024-05-04 17:21:47 - New user added: Tom Franks (tom.franks@agecare.com) in department Medical by admin@admin.com
+2024-05-04 17:28:28 - User removed with ID: 20 by admin@admin.com
+2024-05-04 17:40:32 - New user added: Tom Franks (tom.franks@agecare.com) in department Medical by admin@admin.com
+2024-05-04 17:56:28 - Password reset for user: Amber Angolla (ID: 15) by admin@admin.com
+2024-05-04 18:02:40 - MFA status updated for user: (ID: 15, Email: amber.angolla@gmail.com) to Yes by admin@admin.com
