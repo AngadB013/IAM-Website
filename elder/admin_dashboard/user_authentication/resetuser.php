@@ -21,6 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_password']) && $
     // Hash the new password
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
+    // Retrieve user's name
+    $user_name = '';
+    $user_query = mysqli_query($conn, "SELECT name FROM carestaff WHERE id = $user_id");
+    if ($user_query && mysqli_num_rows($user_query) > 0) {
+        $user_data = mysqli_fetch_assoc($user_query);
+        $user_name = $user_data['name'];
+    }
+
     // Prepare the SQL statement to prevent SQL injection
     $sql = "UPDATE carestaff SET password = ? WHERE id = ?";
     $stmt = mysqli_prepare($conn, $sql);
@@ -31,6 +39,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_password']) && $
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
         $success_message = "Password reset successfully.";
+
+        // Log the action to the database
+        $action_description = "Password reset for user: " . $user_name . " (ID: " . $user_id . ")";
+        $user_email = $_SESSION['email'];
+        $action_time = date("Y-m-d H:i:s");
+
+        $log_sql = "INSERT INTO log_entries (action_time, action_description, user_email) VALUES ('$action_time', '$action_description', '$user_email')";
+
+        if (mysqli_query($conn, $log_sql)) {
+            $success_message .= " Action logged successfully.";
+        } else {
+            $error_message = "Error logging password reset: " . mysqli_error($conn);
+        }
+
+        // Log the action to text file
+        $log_file = "log.txt";
+        $log_entry = date("Y-m-d H:i:s") . " - " . $action_description . " by " . $_SESSION['email'] . "\n";
+        file_put_contents($log_file, $log_entry, FILE_APPEND);
     } else {
         $error_message = "Error resetting password: " . mysqli_stmt_error($stmt);
     }
@@ -50,6 +76,7 @@ $result = mysqli_query($conn, $sql);
 // Close connection
 mysqli_close($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -279,7 +306,7 @@ mysqli_close($conn);
                     <li><a href="adduser.php">Add Users</a></li>
                     <li><a href="removeuser.php">Remove Users</a></li>
                     <li><a href="resetuser.php">Reset Password</a></li>
-                    <li><a href="#">Access</a></li>
+                    <li><a href="mfa.php">MFA Access</a></li>
                 </ul>
             </li>
             <li><a href="#">Settings</a></li>
