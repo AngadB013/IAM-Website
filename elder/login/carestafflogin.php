@@ -1,3 +1,4 @@
+
 <?php
 // Start session
 session_start();
@@ -12,26 +13,33 @@ if ($conn->connect_error) {
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if email, password, and pin are filled
-    if (empty($_POST["email"]) || empty($_POST["password"]) || empty($_POST["pin"])) {
-        echo "<script>alert('Please enter email, password, and PIN');</script>";
+    // Check if email and password are filled
+    if (empty($_POST["email"]) || empty($_POST["password"])) {
+        echo "<script>alert('Please enter email and password');</script>";
     } else {
         // Sanitize input data
         $email = mysqli_real_escape_string($conn, $_POST['email']);
-        // Hash the password for security
-        $password = password_hash(mysqli_real_escape_string($conn, $_POST['password']), PASSWORD_DEFAULT);
-        // Serialize the array of PIN inputs into a string
-        $pin = implode('', array_map('intval', $_POST['pin']));
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        // Insert data into staff table
-        $sql = "INSERT INTO staff (email, password, pin) VALUES ('$email', '$password', '$pin')";
+        // Query to check if email and password exist in carestaff table
+        $query = "SELECT * FROM carestaff WHERE email='$email'";
+        $result = $conn->query($query);
 
-        if ($conn->query($sql) === TRUE) {
-            // Redirect to dashboard or another page
-            header("Location: ../insert.php");
-            exit();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if (password_verify($password, $row['password'])) {
+                // Set session variables
+                $_SESSION['loggedin'] = true;
+                $_SESSION['email'] = $email;
+
+                // Redirect to dashboard or another page
+                header("Location: ../carestaff_dashboard/dashboard.php");
+                exit();
+            } else {
+                echo "<script>alert('Invalid email or password');</script>";
+            }
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "<script>alert('Invalid email or password');</script>";
         }
     }
 }
@@ -40,14 +48,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Care Staff Login</title>
-    <style>
-        body {
+  <title>Care Staff Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
+
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+
+  <style>
+    body {
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -97,36 +109,16 @@ $conn->close();
             font-weight: bold; /* Make label input borders bold */
             text-align: left; /* Align label text to the left */
         }
-
-        .login-container input[type="email"],
-        .login-container input[type="password"],
-        .login-container input[type="text"] {
-            width: calc(100% - 20px); /* Reduced input width to accommodate border */
-            padding: 10px;
-            margin-bottom: 10px; /* Reduced margin */
-            border: 2px solid #ccc; /* Set border to bold */
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .login-container .pin-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px; /* Reduced margin */
-        }
-
-        .login-container .pin-input {
-            width: 50px;
-            height: 50px;
-            padding: 10px;
-            margin: 0 5px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: calc(100% - 20px); /* Reduced input width to accommodate border */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc; /* Set border to bold */
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
 
         .login-container button {
             width: calc(100% - 20px); /* Reduced button width */
@@ -162,23 +154,18 @@ $conn->close();
     <div class="login-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h1>Care Staff Login</h1>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br>
+            <input type="email" id="email" name="email" required><br><br>
             <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br>
-            <label for="pin">PIN (4 digits):</label><br>
-            <div class="pin-container">
-                <input type="text" class="pin-input" name="pin[]" maxlength="1" pattern="\d" required>
-                <input type="text" class="pin-input" name="pin[]" maxlength="1" pattern="\d" required>
-                <input type="text" class="pin-input" name="pin[]" maxlength="1" pattern="\d" required>
-                <input type="text" class="pin-input" name="pin[]" maxlength="1" pattern="\d" required>
-            </div>
+            <input type="password" id="password" name="password" required><br><br>
             <button type="submit">Login</button>
         </form>
         <div class="contact-info">
             Please contact the IT department for any issues, including forgotten passwords, emails, or PINs, or for any other assistance. You can reach us at +61 XXX or via email at it@example.com.
         </div>
+        <?php
+        ?>
     </div>
 </body>
 </html>
