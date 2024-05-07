@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['email'] = $email;
 
                 // Redirect to dashboard or another page
-                header("Location: ../carestaff_dashboard/dashboard.php");
+                header("Location: ../care_staff_dashboard/dashboard_staff.php");
                 exit();
             } else {
                 echo "<script>alert('Invalid email or password');</script>";
