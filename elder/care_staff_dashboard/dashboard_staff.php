@@ -128,8 +128,8 @@ mysqli_close($conn);
         <ul>
             <?php if ($department === "Medical"): ?>
                 <li><a href="medical_dashboard.php">Dashboard</a></li>
-                <li><a href="medical_dashboard.php">All Patients</a></li>
-                <li><a href="medical_dashboard.php">Add Patients</a></li>
+                <li><a href="all_patient.php">All Patients</a></li>
+                <li><a href="add_patient.php">Add Patients</a></li>
                 <li><a href="medical_dashboard.php">Remove Patients</a></li>
                 <li><a href="patient_records.php">Patient Records</a>
                     <ul class="sub-menu">
