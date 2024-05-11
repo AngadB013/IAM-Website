@@ -267,6 +267,7 @@
                     <ul class="sub-menu">
                         <li><a href="patient_documents.php">Download Patient Medical Records</a></li>
                         <li><a href="upload_patient_documents.php">Upload Patient Medical Records</a></li>
+                        <li><a href="delete_document.php">Delete Patient Medical Records</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Settings</a></li>
