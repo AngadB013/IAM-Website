@@ -1,37 +1,54 @@
 <?php
-session_start();
-if (!isset($_SESSION['email'])) {
-    header("Location: ../login/carestafflogin.php");
-    exit();
-}
+    session_start();
+    if (!isset($_SESSION['email'])) {
+        header("Location: ../login/carestafflogin.php");
+        exit();
+    }
 
-// Database connection
-$conn = mysqli_connect("localhost", "root", "", "aged_care_db");
+    // Database connection
+    $conn = mysqli_connect("localhost", "root", "", "aged_care_db");
 
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
 
-// Retrieve user details
-$email = $_SESSION['email'];
-$sql = "SELECT department, position FROM carestaff WHERE email = '$email'";
-$result = mysqli_query($conn, $sql);
+    // Retrieve user details
+    $email = $_SESSION['email'];
+    $sql = "SELECT department, position FROM carestaff WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
 
-// Check if query was successful
-if ($result && mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $department = $row['department'];
-    $position = $row['position'];
-} else {
-    $department = $position = "Unknown"; // Default values if not found
-}
+    // Check if query was successful
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $department = $row['department'];
+        $position = $row['position'];
+    } else {
+        $department = $position = "Unknown"; // Default values if not found
+    }
 
-                   // Retrieve list of patients
-                   $sql = "SELECT * FROM patient";
-                   $result = mysqli_query($conn, $sql);
-// Close connection
-mysqli_close($conn);
+    // Retrieve list of patients
+    $sql = "SELECT * FROM patient";
+    $result = mysqli_query($conn, $sql);
+
+    // Check if the delete button is clicked
+    if (isset($_POST['delete'])) {
+        // Get the patient ID from the form
+        $patient_id = $_POST['patient_id'];
+
+        // SQL query to delete the patient
+        $sql = "DELETE FROM patient WHERE patient_id = '$patient_id'";
+
+        // Execute the query
+        if (mysqli_query($conn, $sql)) {
+            $success_message = "Patient deleted successfully.";
+        } else {
+            $error_message = "Error deleting patient: " . mysqli_error($conn);
+        }
+    }
+
+    // Close connection
+    mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -132,47 +149,61 @@ mysqli_close($conn);
     }
 
     /* Styles for the table */
-.user-table {
-    margin: 20px 50px; /* Add some margin and move the table right */
-    border-collapse: collapse; /* Collapse table borders */
-    width: calc(100% - 450px); /* Adjust width to fit the empty space */
-    font-family: 'Roboto', sans-serif; /* Use Roboto font */
-    background-color: #ffffff; /* Background color */
+    .user-table {
+        margin: 20px 50px; /* Add some margin and move the table right */
+        border-collapse: collapse; /* Collapse table borders */
+        width: calc(100% - 450px); /* Adjust width to fit the empty space */
+        font-family: 'Roboto', sans-serif; /* Use Roboto font */
+        background-color: #ffffff; /* Background color */
+    }
+
+    /* Styles for table header */
+    .user-table th {
+        background-color: #f2f2f2; /* Add background color to header */
+        border: 1px solid #ddd; /* Add border */
+        padding: 12px; /* Add padding */
+        text-align: left; /* Align text left */
+        font-size: 16px; /* Font size */
+        font-weight: bold; /* Font weight */
+        color: #333333; /* Text color */
+    }
+
+    /* Styles for table data */
+    .user-table td {
+        border: 1px solid #ddd; /* Add border */
+        padding: 12px; /* Add padding */
+        text-align: left; /* Align text left */
+        font-size: 14px; /* Font size */
+        color: #666666; /* Text color */
+    }
+
+    /* Styles for table row on hover */
+    .user-table tbody tr:hover {
+        background-color: #f2f2f2; /* Background color */
+    }
+
+    /* Styles for no data message */
+    .user-table td[colspan='6'] {
+        text-align: center; /* Align text center */
+        padding: 20px; /* Add padding */
+        font-size: 16px; /* Font size */
+        color: #666666; /* Text color */
+    }
+
+    /* Styles for delete button */
+.delete-btn {
+    background-color: #ff4d4d; /* Red background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    padding: 8px 16px; /* Add padding */
+    border-radius: 4px; /* Add border radius */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s ease; /* Add transition effect */
 }
 
-/* Styles for table header */
-.user-table th {
-    background-color: #f2f2f2; /* Add background color to header */
-    border: 1px solid #ddd; /* Add border */
-    padding: 12px; /* Add padding */
-    text-align: left; /* Align text left */
-    font-size: 16px; /* Font size */
-    font-weight: bold; /* Font weight */
-    color: #333333; /* Text color */
+.delete-btn:hover {
+    background-color: #e60000; /* Darker red color on hover */
 }
-
-/* Styles for table data */
-.user-table td {
-    border: 1px solid #ddd; /* Add border */
-    padding: 12px; /* Add padding */
-    text-align: left; /* Align text left */
-    font-size: 14px; /* Font size */
-    color: #666666; /* Text color */
-}
-
-/* Styles for table row on hover */
-.user-table tbody tr:hover {
-    background-color: #f2f2f2; /* Background color */
-}
-
-/* Styles for no data message */
-.user-table td[colspan='6'] {
-    text-align: center; /* Align text center */
-    padding: 20px; /* Add padding */
-    font-size: 16px; /* Font size */
-    color: #666666; /* Text color */
-}
-
 </style>
 <body>
 
@@ -295,7 +326,7 @@ mysqli_close($conn);
                             echo "<td>";
                             echo "<form method='post' action='remove.patient.php' onsubmit='return confirmDelete()'>";
                             echo "<input type='hidden' name='patient_id' value='" . $row['patient_id'] . "'>";
-                            echo "<button type='submit' name='delete'>Delete</button>";
+                            echo "<button type='submit' name='delete' class='delete-btn'>Delete</button>";
                             echo "</form>";
                             echo "</td>";
                             echo "</tr>";
@@ -310,10 +341,12 @@ mysqli_close($conn);
     </div>
 
     <?php
-    // Display success message if set
-    if (isset($success_message)) {
-        echo "<script>alert('$success_message');</script>";
-    }
+        // Display success or error message if set
+        if (isset($success_message)) {
+            echo "<script>alert('$success_message');</script>";
+        } elseif (isset($error_message)) {
+            echo "<script>alert('$error_message');</script>";
+        }
     ?>
 
 </body>
