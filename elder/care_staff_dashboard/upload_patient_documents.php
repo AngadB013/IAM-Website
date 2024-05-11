@@ -70,38 +70,84 @@ mysqli_close($conn);
     <link rel="stylesheet" href="leftbar.css"/>
 </head>
 <style>
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
 
-.card {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 800px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+    .card {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.card:hover {
-    background-color: #f2f2f2;
-}
+    .card:hover {
+        background-color: #f2f2f2;
+    }
 
-.card a {
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Inherit text color */
-}
+    .card a {
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit text color */
+    }
 
     /* Styles for the container */
     .container {
         margin-left: 250px; /* Adjust left margin */
     }
+
+    .form-group {
+    margin-bottom: 15px;
+    }
+
+    .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    }
+
+    button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.8; /* Initially disabled */
+    margin-top:12px;
+    }
+
+    button[type="submit"]:hover {
+    opacity: 1; /* Enable hover effect */
+    }
+
+    /* Success/Error message styles (optional) */
+p {
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
 </style>
 <body>
 
@@ -165,6 +211,7 @@ mysqli_close($conn);
                     <ul class="sub-menu">
                         <li><a href="patient_documents.php">Download Patient Medical Records</a></li>
                         <li><a href="upload_patient_documents.php">Upload Patient Medical Records</a></li>
+                        <li><a href="delete_document.php">Delete Patient Medical Records</a></li>
                     </ul>
                 </li>
                 <li><a href="#">Settings</a></li>
