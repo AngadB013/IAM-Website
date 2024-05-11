@@ -14,3 +14,6 @@ Features -
  8. Tracking/Monitoring - System automaticaly logs entries for all actions taking place in the website
  9. All users registered within the company is shown in the dashbaord
  10. All logged in users, on the website are shown on top of the navbar.
+ 11. Care Staff will get to view different dasboard as per their departments.
+ 12. Medical department can access medical records of patients, upload, delete the medical documents and also manage the patients.
+ 13. Finance department can access the finance documents. 
