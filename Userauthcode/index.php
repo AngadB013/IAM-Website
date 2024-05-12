@@ -57,8 +57,7 @@
        $sqlUserAuth = "CREATE TABLE IF NOT EXISTS userAuth (
          user_id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
          user_email VARCHAR(50) NOT NULL,
-         password VARCHAR(50) NOT NULL,
-         authKey INT(4) NOT NULL
+         password VARCHAR(50) NOT NULL
      );";
 
 //table creation execute
@@ -67,11 +66,17 @@
         . "<p>Error code " . mysqli_errno($dbConnect)
         . ": " . mysqli_error($dbConnect) . "</p>");
 
-        $sqlInsertintouserAuth = "INSERT INTO userAuth (user_id, user_email, password, authKey)
-        VALUES (1, 'admin@gmail.com', 'admin1', 1234)
+        $sqlInsertintouserAuth1 = "INSERT INTO userAuth (user_id, user_email, password)
+        VALUES (1, 'admin@gmail.com', 'admin1')
         ON DUPLICATE KEY UPDATE user_id = user_id;";
 
-        $queryResultInsert1 = @mysqli_query($dbConnect, $sqlInsertintouserAuth);
+        $sqlInsertintouserAuth2 = "INSERT INTO userAuth (user_id, user_email, password)
+        VALUES (2, 'callumpmarsh@gmail.com', 'admin2')
+        ON DUPLICATE KEY UPDATE user_id = user_id;";
+
+        $queryResultInsert1 = @mysqli_query($dbConnect, $sqlInsertintouserAuth1);
+
+        $queryResultInsert2 = @mysqli_query($dbConnect, $sqlInsertintouserAuth2);
 
         mysqli_close($dbConnect);
     ?>
