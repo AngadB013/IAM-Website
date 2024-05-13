@@ -30,6 +30,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 // Close connection
 mysqli_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,192 +75,211 @@ mysqli_close($conn);
 
 /* Styles for the container */
 .container {
-        margin-left: 250px; /* Adjust left margin */
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width:80%;
-        margin-top:20px;
-    }
+    margin-left: 250px; /* Adjust left margin */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width:80%;
+    margin-top:20px;
+}
 
-    .heading {
-        font-size: 24px;
-        margin-bottom: 20px;
-        margin-top: 50px;
-        display:flex;
-        justify-content: space-between; /* Align items to the left and right */
-        align-items: center; /* Align items vertically */
-    }
+.heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    display:flex;
+    justify-content: space-between; /* Align items to the left and right */
+    align-items: center; /* Align items vertically */
+}
 
-        .document-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.document-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .document-table th, .document-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+.document-table th, .document-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
 
-        .document-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            color: #333;
-        }
+.document-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
 
-        .document-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+.document-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
 
-        .document-table tbody tr:hover {
-            background-color: #f2f2f2;
-        }
+.document-table tbody tr:hover {
+    background-color: #f2f2f2;
+}
 
-        .download-link {
-            background-color: #0b9045;; /* Red background color */
-            color: #fff; /* White text color */
-            border: none; /* Remove border */
-            padding: 8px 16px; /* Add padding */
-            border-radius: 4px; /* Add border radius */
-            cursor: pointer; /* Add cursor pointer */
-            transition: background-color 0.3s ease; /* Add transition effect */
-        }
+.download-link {
+    background-color: #0b9045;; /* Red background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    padding: 8px 16px; /* Add padding */
+    border-radius: 4px; /* Add border radius */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s ease; /* Add transition effect */
+}
 
-        .download-link:hover {
-            background-color: green; /* Darker red color on hover */
-        }
+.download-link:hover {
+    background-color: green; /* Darker red color on hover */
+}
 
 </style>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <img src="../admin_dashboard/../logo1.png" alt="Logo" class="logo">
-            <h1 style="font-family: Luckiest Guy, cursive;">IAM System</h1>
+<header>
+    <div class="logo-container">
+        <img src="../admin_dashboard/../logo1.png" alt="Logo" class="logo">
+        <h1 style="font-family: Luckiest Guy, cursive;">IAM System</h1>
+    </div>
+    <div class="search-container">
+         <!-- Notification icon -->
+         <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
         </div>
-        <div class="search-container">
-             <!-- Notification icon -->
-             <div class="notification-icon">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="user-info">
+            <div class="user-details" id="userDropdown">
+                <span class="user-circle"><?php echo getUserInitials($_SESSION['email']); ?></span>
+                <div class="user-email"><?php echo $_SESSION['email']; ?></div>
             </div>
-            <div class="search-bar">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" placeholder="Search">
-            </div>
-            <div class="user-info">
-                <div class="user-details" id="userDropdown">
-                    <span class="user-circle"><?php echo getUserInitials($_SESSION['email']); ?></span>
-                    <div class="user-email"><?php echo $_SESSION['email']; ?></div>
-                </div>
-                <div class="user-position"><?php echo $position; ?></div> <!-- Display position here -->
-                <!-- Dropdown menu -->
-                <div class="dropdown" id="dropdownMenu">
-                    <a href="index.html">Logout</a>
-                </div>
+            <div class="user-position"><?php echo $position; ?></div> <!-- Display position here -->
+            <!-- Dropdown menu -->
+            <div class="dropdown" id="dropdownMenu">
+                <a href="index.html">Logout</a>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <?php
-    function getUserInitials($email) {
-        $name_parts = explode('@', $email);
-        $initials = '';
-        foreach (explode('.', $name_parts[0]) as $part) {
-            $initials .= strtoupper($part[0]);
-        }
-        return $initials;
+<?php
+function getUserInitials($email) {
+    $name_parts = explode('@', $email);
+    $initials = '';
+    foreach (explode('.', $name_parts[0]) as $part) {
+        $initials .= strtoupper($part[0]);
     }
-    ?>
+    return $initials;
+}
+?>
 
-    <script>
-        document.getElementById("userDropdown").addEventListener("click", function() {
-            var dropdownMenu = document.getElementById("dropdownMenu");
-            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-        });
-    </script>
+<script>
+    document.getElementById("userDropdown").addEventListener("click", function() {
+        var dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+</script>
 
-    <!-- Left navbar -->
-    <div class="navbar">
-    <nav>
-        <ul>
-            <?php if ($department === "Medical"): ?>
-                <li><a href="medical_dashboard.php">Dashboard</a></li>
-                <li><a href="all_patient.php">All Patients</a></li>
-                <li><a href="add_patient.php">Add Patients</a></li>
-                <li><a href="remove.patient.php">Remove Patients</a></li>
-                <li><a href="patient_records.php">Patient Records</a>
-                    <ul class="sub-menu">
-                        <li><a href="patient_documents.php">Download Patient Medical Records</a></li>
-                        <li><a href="upload_patient_documents.php">Upload Patient Medical Records</a></li>
-                        <li><a href="delete_document.php">Delete Patient Medical Records</a></li>
+<!-- Left navbar -->
+<div class="navbar">
+<nav>
+    <ul>
+        <?php if ($department === "Medical"): ?>
+            <li><a href="medical_dashboard.php">Dashboard</a></li>
+            <li><a href="all_patient.php">All Patients</a></li>
+            <li><a href="add_patient.php">Add Patients</a></li>
+            <li><a href="remove.patient.php">Remove Patients</a></li>
+            <li><a href="patient_records.php">Patient Records</a>
+                <ul class="sub-menu">
+                    <li><a href="patient_documents.php">Download Patient Medical Records</a></li>
+                    <li><a href="upload_patient_documents.php">Upload Patient Medical Records</a></li>
+                    <li><a href="delete_document.php">Delete Patient Medical Records</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Settings</a></li>
+            <!-- Add more medical-specific links here -->
+        <?php elseif ($department === "Finance"): ?>
+            <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
+            <li><a href="all_staff.php">All Staff</a></li>
+            <li><a href="financial_reports.php">Financial Reports</a>
+                <ul class="sub-menu">
+                        <li><a href="finance_document.php">Download Financial Reports</a></li>
+                        <li><a href="upload_finance_document.php">Upload Financial Records</a></li>
+                        <li><a href="delete_finance_document.php">Delete Financial Records</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Settings</a></li>
-                <!-- Add more medical-specific links here -->
-            <?php elseif ($department === "Finance"): ?>
-                <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="all_staff.php">All Staff</a></li>
-                <li><a href="financial_reports.php">Financial Reports</a></li>
-                <li><a href="finance_documents.php">Finance Documents</a></li>
-                <!-- Add more finance-specific links here -->
-            <?php else: ?>
-                <!-- Default links for other departments -->
-                <li><a href="#">General Dashboard</a></li>
-                <!-- Add more default links here -->
-            <?php endif; ?>
-        </ul>
-    </nav>
-    </div>
+            <!-- Add more finance-specific links here -->
+        <?php else: ?>
+            <!-- Default links for other departments -->
+            <li><a href="#">General Dashboard</a></li>
+            <!-- Add more default links here -->
+        <?php endif; ?>
+    </ul>
+</nav>
+</div>
 
-    <!-- Container for finance report download -->
-   <div class="container">
-        <!-- Heading with total finance documents -->
-        <h2 class="heading">Financial Reports</h2>
-        
-        <!-- Line -->
-        <div class="line"></div>
+<!-- Container for finance report download -->
+<div class="container">
+    <!-- Heading with total finance documents -->
+    <h2 class="heading">Financial Reports</h2>
+    
+    <!-- Line -->
+    <div class="line"></div>
 
-        <!-- Finance report download table -->
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>No.</th> <!-- Number column -->
-                    <th>Report Name</th>
-                    <th>Uploaded By</th>
-                    <th>Uploaded At</th>
-                    <th>Action</th> <!-- For download action -->
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                    // Counter for numbering
-                    $counter = 1;
+    <!-- Finance report download table -->
+    <table class="document-table">
+        <thead>
+            <tr>
+                <th>No.</th> <!-- Number column -->
+                <th>Report Name</th>
+                <th>Uploaded By</th>
+                <th>Uploaded At</th>
+                <th>Action</th> <!-- For download action -->
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Database connection
+            $conn = mysqli_connect("localhost", "root", "", "aged_care_db");
 
-                    // Fetch and display finance report data
-                    // Replace the below array with the actual report data from your database
-                    $reports = array(
-                        array("Report 1", "John Doe", "2024-05-01"),
-                        array("Report 2", "Jane Smith", "2024-05-02"),
-                        array("Report 3", "Bob Johnson", "2024-05-03")
-                    );
+            // Check connection
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
 
-                    foreach ($reports as $report) {
-                        echo "<tr>";
-                        echo "<td>" . $counter . "</td>"; // Number column
-                        echo "<td>" . $report[0] . "</td>"; // Report Name
-                        echo "<td>" . $report[1] . "</td>"; // Uploaded By
-                        echo "<td>" . $report[2] . "</td>"; // Uploaded At
-                        echo "<td><a href='#'>Download</a></td>"; // Download link
-                        echo "</tr>";
-                        $counter++; // Increment counter
-                    }
-                ?>
-            </tbody>
-        </table>
-    </div>
+            // Retrieve finance reports
+            $sql = "SELECT * FROM finance_documents";
+            $result = mysqli_query($conn, $sql);
+
+            // Counter for numbering
+            $counter = 1;
+
+            // Check if there are reports
+            if ($result && mysqli_num_rows($result) > 0) {
+                // Output data of each row
+                while($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $counter . "</td>"; // Number column
+                    echo "<td>" . $row["document_name"] . "</td>"; // Report Name
+                    echo "<td>" . $row["uploaded_by"] . "</td>"; // Uploaded By
+                    echo "<td>" . $row["uploaded_at"] . "</td>"; // Uploaded At
+                    echo "<td><a href='download_finance.php?document_id=" . $row['document_id'] . "' class='download-link'>Download</a></td>"; // Download link
+                    echo "</tr>";
+                    $counter++; // Increment counter
+                }
+            } else {
+                echo "<tr><td colspan='5'>No reports found</td></tr>";
+            }
+
+            // Close connection
+            mysqli_close($conn);
+            ?>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
+
