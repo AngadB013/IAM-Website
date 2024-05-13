@@ -84,7 +84,7 @@
             <a href=""><h3>Caregiver access</h3></a>
         </div>
         <div class="card">
-            <a href="Log_Monitor/Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
+            <a href="../Log Monitor/Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
         </div>
     </div>
 
