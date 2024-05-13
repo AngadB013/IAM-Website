@@ -72,6 +72,65 @@ mysqli_close($conn);
     color: inherit; /* Inherit text color */
 }
 
+/* Styles for the container */
+.container {
+        margin-left: 250px; /* Adjust left margin */
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width:80%;
+        margin-top:20px;
+    }
+
+    .heading {
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin-top: 50px;
+        display:flex;
+        justify-content: space-between; /* Align items to the left and right */
+        align-items: center; /* Align items vertically */
+    }
+
+        .document-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .document-table th, .document-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .document-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .document-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .document-table tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .download-link {
+            background-color: #0b9045;; /* Red background color */
+            color: #fff; /* White text color */
+            border: none; /* Remove border */
+            padding: 8px 16px; /* Add padding */
+            border-radius: 4px; /* Add border radius */
+            cursor: pointer; /* Add cursor pointer */
+            transition: background-color 0.3s ease; /* Add transition effect */
+        }
+
+        .download-link:hover {
+            background-color: green; /* Darker red color on hover */
+        }
+
 </style>
 <body>
 
@@ -142,14 +201,9 @@ mysqli_close($conn);
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
-                <li>><a href="all_staff.php">All Staff</a></li>
-                <li><a href="financial_reports.php">Financial Reports</a>
-                <ul class="sub-menu">
-                        <li><a href="finance_document.php">Download Financial Reports</a></li>
-                        <li><a href="upload_finance_document.php">Upload Financial Records</a></li>
-                        <li><a href="delete_finance_document.php">Delete Financial Records</a></li>
-                    </ul>
-                </li>
+                <li><a href="all_staff.php">All Staff</a></li>
+                <li><a href="financial_reports.php">Financial Reports</a></li>
+                <li><a href="finance_documents.php">Finance Documents</a></li>
                 <!-- Add more finance-specific links here -->
             <?php else: ?>
                 <!-- Default links for other departments -->
@@ -158,6 +212,53 @@ mysqli_close($conn);
             <?php endif; ?>
         </ul>
     </nav>
+    </div>
+
+    <!-- Container for finance report download -->
+   <div class="container">
+        <!-- Heading with total finance documents -->
+        <h2 class="heading">Financial Reports</h2>
+        
+        <!-- Line -->
+        <div class="line"></div>
+
+        <!-- Finance report download table -->
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>No.</th> <!-- Number column -->
+                    <th>Report Name</th>
+                    <th>Uploaded By</th>
+                    <th>Uploaded At</th>
+                    <th>Action</th> <!-- For download action -->
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    // Counter for numbering
+                    $counter = 1;
+
+                    // Fetch and display finance report data
+                    // Replace the below array with the actual report data from your database
+                    $reports = array(
+                        array("Report 1", "John Doe", "2024-05-01"),
+                        array("Report 2", "Jane Smith", "2024-05-02"),
+                        array("Report 3", "Bob Johnson", "2024-05-03")
+                    );
+
+                    foreach ($reports as $report) {
+                        echo "<tr>";
+                        echo "<td>" . $counter . "</td>"; // Number column
+                        echo "<td>" . $report[0] . "</td>"; // Report Name
+                        echo "<td>" . $report[1] . "</td>"; // Uploaded By
+                        echo "<td>" . $report[2] . "</td>"; // Uploaded At
+                        echo "<td><a href='#'>Download</a></td>"; // Download link
+                        echo "</tr>";
+                        $counter++; // Increment counter
+                    }
+                ?>
+            </tbody>
+        </table>
     </div>
 
 </body>
