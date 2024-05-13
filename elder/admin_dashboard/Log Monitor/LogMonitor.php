@@ -86,28 +86,29 @@
         </table>
     </div>
             <!-- Left navbar -->
-        <div class="navbar">
-            <ul>
-                <li>
-                    <a href="userauth.php"><h3>Home</h3></a>
-                </li>
-                <li>
-                    <a href="" ><h3>Visitor access</h3></a>
-                </li>
-                <li>
-                    <a href="userauth.php"><h3>User Authentication</h3></a>
-                </li>
-                <li>
-                    <a href=""><h3>Authorisation</h3></a>
-                </li>
-                <li>
-                    <a href=""><h3>Caregiver access</h3></a>
-                </li>
-                <li class="card active">
-                    <a href="Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
-                </li>
-            </ul> 
-        </div>
+    <div class="navbar">
+        <ul>
+            <li>
+                <a href="../dashboard.php"><h3>Home</h3></a>
+            </li>
+            <li>
+                <a href="#" ><h3>Visitor access</h3></a>
+            </li>
+            <li>
+                <a href="../user_authentication/userauth.php"><h3>User Authentication</h3></a>
+            </li>
+            <li>
+                <a href="#"><h3>Authorisation</h3></a>
+            </li>
+            <li>
+                <a href="#"><h3>Caregiver access</h3></a>
+            </li>
+            <li class="card active">
+                <a href="../Log Monitor/Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
+            </li>
+        </ul> 
+    </div>
+</div>
     </div>
 </body>
 </html>
