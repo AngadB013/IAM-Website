@@ -142,8 +142,15 @@ mysqli_close($conn);
                 <li><a href="#">Settings</a></li>
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
-                <li><a href="finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="financial_reports.php">Financial Reports</a></li>
+                <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
+                <li>><a href="finance/all_staff.php">All Staff</a></li>
+                <li><a href="financial_reports.php">Financial Reports</a>
+                <ul class="sub-menu">
+                        <li><a href="finance_document.php">Download Financial Reports</a></li>
+                        <li><a href="upload_finance_document.php">Upload Financial Records</a></li>
+                        <li><a href="delete_finance_document.php">Delete Financial Records</a></li>
+                    </ul>
+                </li>
                 <!-- Add more finance-specific links here -->
             <?php else: ?>
                 <!-- Default links for other departments -->
