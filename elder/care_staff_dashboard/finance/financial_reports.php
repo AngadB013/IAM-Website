@@ -242,7 +242,7 @@ mysqli_close($conn);
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="financial_reports.php">Financial Reports</a></li>
+                <li><a href="all_staff.php">All Staff</a></li>
                 <li><a href="financial_reports.php">Financial Reports</a>
                 <ul class="sub-menu">
                         <li><a href="finance_document.php">Download Financial Reports</a></li>
