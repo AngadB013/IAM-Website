@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['email'])) {
-    header("Location: ../login/carestafflogin.php");
+    header("Location: ../login/finance_login.php");
     exit();
 }
 
@@ -27,17 +27,14 @@ if ($result && mysqli_num_rows($result) > 0) {
     $department = $position = "Unknown"; // Default values if not found
 }
 
-// Query to fetch patient data
-$sql = "SELECT first_name, last_name, phone, suburb, state FROM patient";
+// Query to fetch finance documents
+$sql = "SELECT * FROM finance_documents";
 $result = mysqli_query($conn, $sql);
 
 // Check if query was successful
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
-
-// Get total number of patients
-$total_patients = mysqli_num_rows($result);
 
 // Close connection
 mysqli_close($conn);
@@ -53,8 +50,8 @@ mysqli_close($conn);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="navbar.css"/>
-    <link rel="stylesheet" href="leftbar.css"/>
+    <link rel="stylesheet" href="../navbar.css"/>
+    <link rel="stylesheet" href="../leftbar.css"/>
 </head>
 <style>
 .dashboard {
@@ -245,6 +242,7 @@ mysqli_close($conn);
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance_dashboard.php">Finance Dashboard</a></li>
                 <li><a href="financial_reports.php">Financial Reports</a></li>
+                <li><a href="finance_documents.php">Finance Documents</a></li> <!-- Added link -->
                 <!-- Add more finance-specific links here -->
             <?php else: ?>
                 <!-- Default links for other departments -->
@@ -255,30 +253,27 @@ mysqli_close($conn);
     </nav>
     </div>
 
-     <!-- Container for user data -->
+     <!-- Container for finance document data -->
    <div class="container">
-        <!-- Heading with total users -->
-        <h2 class="heading">Patients
+        <!-- Heading with total finance documents -->
+        <h2 class="heading">Finance Documents
         <!-- Search bar -->
         <div class="search-bar1">
             <input type="text" placeholder="Search by name">
         </div></h2>
-        | Total patients: <?php echo $total_patients; ?> <!-- Correct variable name -->
-        <p class="sub-text">Patients listed here are currently registered within the company system.</p>
         
         <!-- Line -->
         <div class="line"></div>
 
-        <!-- User data table -->
+        <!-- Finance document data table -->
         <table class="user-table">
             <thead>
                 <tr>
                     <th>No.</th> <!-- Number column -->
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Phone No.</th>
-                    <th>Suburb</th>
-                    <th>State</th>
+                    <th>Document Name</th>
+                    <th>Uploaded By</th>
+                    <th>Upload Date</th>
+                    <th>Action</th> <!-- For download or delete action -->
                 </tr>
             </thead>
             <tbody>
@@ -286,21 +281,23 @@ mysqli_close($conn);
                     // Counter for numbering
                     $counter = 1;
 
-                    // Fetch and display user data
+                    // Fetch and display finance document data
                     if (mysqli_num_rows($result) > 0) {
                         while($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>";
                             echo "<td>" . $counter . "</td>"; // Number column
-                            echo "<td>" . $row["first_name"] . "</td>";
-                            echo "<td>" . $row["last_name"] . "</td>";
-                            echo "<td>" . $row["phone"] . "</td>";
-                            echo "<td>" . $row["suburb"] . "</td>";
-                            echo "<td>" . $row["state"] . "</td>";
+                            echo "<td>" . $row["document_name"] . "</td>";
+                            echo "<td>" . $row["uploaded_by"] . "</td>";
+                            echo "<td>" . $row["upload_date"] . "</td>";
+                            echo "<td>";
+                            echo "<a href='" . $row["document_path"] . "' download>Download</a> | ";
+                            echo "<a href='delete_finance_document.php?id=" . $row["id"] . "'>Delete</a>";
+                            echo "</td>";
                             echo "</tr>";
                             $counter++; // Increment counter
                         }
                     } else {
-                        echo "<tr><td colspan='5'>No patient found</td></tr>";
+                        echo "<tr><td colspan='5'>No finance documents found</td></tr>";
                     }
                 ?>
             </tbody>
