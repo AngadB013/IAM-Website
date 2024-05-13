@@ -16,8 +16,7 @@
     <link rel="stylesheet" href="Log_Monitor.css">
     <link rel="stylesheet" href="../navbar.css">
     <link rel="stylesheet" href="../leftbar.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="Internet_Traffic.js"></script>
+    <script src="Log_Monitor.js">
     <?php
     function getUserInitials($email) {
         $name_parts = explode('@', $email);
@@ -28,6 +27,7 @@
         return $initials;
     }
     ?>
+    </script>
 </head>
 <body>
     <header>
@@ -58,30 +58,56 @@
             </div>
         </div>
     </header>
+    <div class="filter_data_by_type_container">
+        <button class="filter_Button" id="all_Log_Button">All logs</button>
+        <button class="filter_Button" id="notice_Button">Notice</button>
+        <button class="filter_Button" id="warn_Button">Warn</button>
+        <button class="filter_Button" id="error_Button">Error</button>
+    </div>
+        <!-- Date range input fields -->
+    <div class="filter_data_by_type_container">            
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+    </div>
+
     <div class="monitor_dashboard">
-      <div id="chart_container"></div>
+        <table id="logTable">
+            <thead>
+             <tr>
+                    <th id="Timestamp">Timestamp</th>
+                    <th id="Description">Description</th>
+                </tr>
+            </thead>
+            <tbody id="logBody">
+
+            </tbody>
+        </table>
     </div>
             <!-- Left navbar -->
-    <div class="navbar">
-        <ul>
-            <li>
-                <a href="userauth.php"><h3>Home</h3></a>
-            </li>
-            <li>
-                <a href="" ><h3>Visitor access</h3></a>
-            </li>
-            <li>
-                <a href="userauth.php"><h3>User Authentication</h3></a>
-            </li>
-            <li>
-                <a href=""><h3>Authorisation</h3></a>
-            </li>
-            <li>
-                <a href=""><h3>Caregiver access</h3></a>
-            </li>
-            <li class="card active">
-                <a href="Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
-            </li>
-        </ul> 
+        <div class="navbar">
+            <ul>
+                <li>
+                    <a href="userauth.php"><h3>Home</h3></a>
+                </li>
+                <li>
+                    <a href="" ><h3>Visitor access</h3></a>
+                </li>
+                <li>
+                    <a href="userauth.php"><h3>User Authentication</h3></a>
+                </li>
+                <li>
+                    <a href=""><h3>Authorisation</h3></a>
+                </li>
+                <li>
+                    <a href=""><h3>Caregiver access</h3></a>
+                </li>
+                <li class="card active">
+                    <a href="Log_Monitor_Main_Page.php"><h3>Threat Monitoring and Response</h3></a>
+                </li>
+            </ul> 
+        </div>
     </div>
 </body>
+</html>

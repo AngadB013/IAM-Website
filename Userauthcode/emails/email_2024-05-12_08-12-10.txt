@@ -1,0 +1,6 @@
+To: admin@gmail.com
+Subject: Authentication Code
+Headers: From: userauth@agecare.com
+
+Message:
+Your authentication code is: 5680

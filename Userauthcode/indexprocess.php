@@ -8,6 +8,7 @@ session_start();
     <meta name="description" content="Web application development" />
     <meta name="keywords" content="PHP" />
     <meta name="author" content="Your Name" />
+    <link rel="stylesheet" href="style2.css">
     </head>
 <body>
     <h1>User Authentication</h1>
@@ -42,28 +43,32 @@ session_start();
     $rowCount = mysqli_num_rows($queryResult);
 
     if ($rowCount > 0) {
-        // Assuming the login is successful
+        // Login successful, retrieve user email
         $row = mysqli_fetch_assoc($queryResult);
-        $userid = $row['user_id'];
+        $userEmail = $row['user_email'];
 
+        // Generate authentication code (replace with your actual code generation logic)
+        $authCode = generateAuthCode(); // Function to generate authentication code
 
-        // Set the user ID in the session variable
-       $_SESSION['user_id'] = $userid;
-	   $userid = $_SESSION["user_id"];
+        // Store authCode and userEmail in session for use in authKey.php
+        $_SESSION['auth_code'] = $authCode;
+        $_SESSION['user_email'] = $userEmail;
 
-       
-	
-	   $_SESSION["email"] = $email;//creates the session variable	
-       $_SESSION["pword"] = $pword;//creates the session variable	
-	   $email = $_SESSION["email"];//copies the value to a variable
-	   $pword = $_SESSION["pword"];//copies the value to a variable
+        // Send email with authentication code
+        $subject = 'Authentication Code';
+        $message = 'Your authentication code is: ' . $authCode;
+        $headers = 'From: userauth@agecare.com'; // Replace with a valid email address
 
-       header("Location: authKey.php");
+        // Call the custom sendDummyMail function to save email details to a text file
+        sendDummyMail($userEmail, $subject, $message, $headers);
+
+        // Redirect to authKey.php (or any other destination)
+        header("Location: authKey.php");
         exit();
-    } else{
+    } else {
         echo "<p>Invalid credentials</p>";
-        sleep(2);
-		header("location:index.php");
+        header("Location: index.php"); // Redirect back to login page
+        exit();
     }
 
     mysqli_free_result($queryResult);
@@ -71,6 +76,34 @@ session_start();
 
 } else {
     echo "<p>Enter both email address and password</p>";
+}
+
+function generateAuthCode() {
+    return mt_rand(1000, 9999); // Generate a random 4-digit code
+}
+
+// Define a custom mail function for testing (saves email content to a text file)
+function sendDummyMail($to, $subject, $message, $headers = '') {
+    // Generate a unique filename for the email text file (e.g., using timestamp)
+    $timestamp = date('Y-m-d_H-i-s');
+    $filename = "emails/email_$timestamp.txt";
+
+    // Construct the email content
+    $emailContent = "To: $to\n";
+    $emailContent .= "Subject: $subject\n";
+    $emailContent .= "Headers: $headers\n\n";
+    $emailContent .= "Message:\n$message\n";
+
+    // Save the email content to a text file
+    $fileSaved = file_put_contents($filename, $emailContent);
+
+    if ($fileSaved !== false) {
+        echo "<p>Dummy email saved to file: $filename</p>";
+        return true; // Email "sent" successfully (saved to file)
+    } else {
+        echo "<p>Failed to save dummy email to file.</p>";
+        return false; // Email "sending" failed
+    }
 }
     ?>
     
