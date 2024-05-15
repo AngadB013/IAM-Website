@@ -30,7 +30,6 @@ if ($result && mysqli_num_rows($result) > 0) {
 // Close connection
 mysqli_close($conn);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +40,8 @@ mysqli_close($conn);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="navbar.css"/>
-    <link rel="stylesheet" href="leftbar.css"/>
+    <link rel="stylesheet" href="../navbar.css"/>
+    <link rel="stylesheet" href="../leftbar.css"/>
 </head>
 <style>
 .dashboard {
@@ -78,7 +77,7 @@ mysqli_close($conn);
 
     <header>
         <div class="logo-container">
-            <img src="../admin_dashboard/logo1.png" alt="Logo" class="logo">
+            <img src="../admin_dashboard/../logo1.png" alt="Logo" class="logo">
             <h1 style="font-family: Luckiest Guy, cursive;">IAM System</h1>
         </div>
         <div class="search-container">
@@ -143,7 +142,7 @@ mysqli_close($conn);
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="finance/all_staff.php">All Staff</a></li>
+                <li>><a href="all_staff.php">All Staff</a></li>
                 <li><a href="financial_reports.php">Financial Reports</a>
                 <ul class="sub-menu">
                         <li><a href="finance_document.php">Download Financial Reports</a></li>

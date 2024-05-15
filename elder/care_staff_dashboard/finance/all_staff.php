@@ -27,10 +27,16 @@ if ($result && mysqli_num_rows($result) > 0) {
     $department = $position = "Unknown"; // Default values if not found
 }
 
+// Query to fetch user data
+$sql = "SELECT name, email, position, department FROM carestaff";
+$result = mysqli_query($conn, $sql);
+
+// Get total number of users
+$total_users = mysqli_num_rows($result);
+
 // Close connection
 mysqli_close($conn);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +47,8 @@ mysqli_close($conn);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="navbar.css"/>
-    <link rel="stylesheet" href="leftbar.css"/>
+    <link rel="stylesheet" href="../navbar.css"/>
+    <link rel="stylesheet" href="../leftbar.css"/>
 </head>
 <style>
 .dashboard {
@@ -73,6 +79,72 @@ mysqli_close($conn);
     color: inherit; /* Inherit text color */
 }
 
+/* Styles for the table-like structure */
+.user-table {
+        margin: 20px 50px; /* Add some margin and move the table right */
+        border-collapse: collapse; /* Collapse table borders */
+        width: calc(100% - 450px); /* Adjust width to fit the empty space */
+        font-family: 'Roboto', sans-serif; /* Use Roboto font */
+    }
+
+    .user-table th,
+    .user-table td {
+        border: 1px solid #ddd; /* Add border */
+        padding: 8px; /* Add padding */
+        text-align: left; /* Align text left */
+    }
+
+    .user-table th {
+        background-color: #f2f2f2; /* Add background color to header */
+    }
+
+    /* Styles for the container */
+    .container {
+        margin-left: 250px; /* Adjust left margin */
+    }
+
+    /* Styles for the heading */
+    .heading {
+        font-size: 24px;
+        margin-bottom: 10px;
+        margin-top: 50px;
+        display:flex;
+        justify-content: space-between; /* Align items to the left and right */
+        align-items: center; /* Align items vertically */
+    }
+
+    /* Styles for the total users */
+    .total-users {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    /* Styles for the search bar */
+    .search-bar1 {
+        margin-left: auto; /* Push to the furthest right */
+    }
+
+    .search-bar1 input[type="text"] {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    /* Styles for the line */
+    .line {
+        width: calc(100% - 100px); /* Adjust width */
+        margin-top: 20px;
+        border-bottom: 4px solid #ddd;
+        margin-left: 50px; /* Adjust left margin */
+    }
+
+    .sub-text{
+        color:grey;
+        font-size: 12px;
+    }
 </style>
 <body>
 
@@ -143,7 +215,7 @@ mysqli_close($conn);
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="finance/all_staff.php">All Staff</a></li>
+                <li><a href="all_staff.php">All Staff</a></li>
                 <li><a href="financial_reports.php">Financial Reports</a>
                 <ul class="sub-menu">
                         <li><a href="finance_document.php">Download Financial Reports</a></li>
@@ -159,6 +231,57 @@ mysqli_close($conn);
             <?php endif; ?>
         </ul>
     </nav>
+    </div>
+
+    <!-- Container for user data -->
+   <div class="container">
+        <!-- Heading with total users -->
+        <h2 class="heading">Users  
+        <!-- Search bar -->
+        <div class="search-bar1">
+            <input type="text" placeholder="Search by name or email">
+        </div></h2>
+        | Total users: <?php echo ($total_users); ?>
+        <p class="sub-text">Users listed here are currently registered within the company system.</p>
+        
+        
+        <!-- Line -->
+        <div class="line"></div>
+
+        <!-- User data table -->
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>No.</th> <!-- Number column -->
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    // Counter for numbering
+                    $counter = 1;
+
+                    // Fetch and display user data
+                    if (mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>" . $counter . "</td>"; // Number column
+                            echo "<td>" . $row["name"] . "</td>";
+                            echo "<td>" . $row["email"] . "</td>";
+                            echo "<td>" . $row["position"] . "</td>";
+                            echo "<td>" . $row["department"] . "</td>";
+                            echo "</tr>";
+                            $counter++; // Increment counter
+                        }
+                    } else {
+                        echo "<tr><td colspan='5'>No users found</td></tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
     </div>
 
 </body>

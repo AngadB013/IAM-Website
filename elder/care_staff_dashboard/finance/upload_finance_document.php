@@ -1,7 +1,8 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['email'])) {
-    header("Location: ../login/carestafflogin.php");
+    header("Location: ../login/finance_login.php"); // Assuming finance login page path
     exit();
 }
 
@@ -15,6 +16,8 @@ if (!$conn) {
 
 // Retrieve user details
 $email = $_SESSION['email'];
+
+// Fetch department and position from the database
 $sql = "SELECT department, position FROM carestaff WHERE email = '$email'";
 $result = mysqli_query($conn, $sql);
 
@@ -25,6 +28,30 @@ if ($result && mysqli_num_rows($result) > 0) {
     $position = $row['position'];
 } else {
     $department = $position = "Unknown"; // Default values if not found
+}
+
+// Handle file upload
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $document_name = $_FILES["document"]["name"];
+    $document_tmp = $_FILES["document"]["tmp_name"];
+    $document_type = $_FILES["document"]["type"];
+    $document_size = $_FILES["document"]["size"];
+    $uploaded_by = $_SESSION["email"];
+
+    // Move the uploaded file to the desired location
+    $uploads_dir = "upload/"; // Directory where documents will be stored
+    $document_path = $uploads_dir . basename($document_name);
+    if (move_uploaded_file($document_tmp, $document_path)) {
+        // Insert the document details into the database
+        $sql = "INSERT INTO finance_documents (document_name, document_path, document_type, document_size, uploaded_by) VALUES ('$document_name', '$document_path', '$document_type', '$document_size', '$uploaded_by')";
+        if (mysqli_query($conn, $sql)) {
+            $success_message = "Document uploaded successfully.";
+        } else {
+            $error_message = "Error uploading document: " . mysqli_error($conn);
+        }
+    } else {
+        $error_message = "Error moving the uploaded file.";
+    }
 }
 
 // Close connection
@@ -41,8 +68,8 @@ mysqli_close($conn);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="navbar.css"/>
-    <link rel="stylesheet" href="leftbar.css"/>
+    <link rel="stylesheet" href="../navbar.css"/>
+    <link rel="stylesheet" href="../leftbar.css"/>
 </head>
 <style>
 .dashboard {
@@ -73,12 +100,63 @@ mysqli_close($conn);
     color: inherit; /* Inherit text color */
 }
 
+ /* Styles for the container */
+ .container {
+        margin-left: 250px; /* Adjust left margin */
+    }
+
+    .form-group {
+    margin-bottom: 15px;
+    }
+
+    .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    }
+
+    button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.8; /* Initially disabled */
+    margin-top:12px;
+    }
+
+    button[type="submit"]:hover {
+    opacity: 1; /* Enable hover effect */
+    }
+
+    /* Success/Error message styles (optional) */
+p {
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+
 </style>
 <body>
 
     <header>
         <div class="logo-container">
-            <img src="../admin_dashboard/logo1.png" alt="Logo" class="logo">
+            <img src="../admin_dashboard/../logo1.png" alt="Logo" class="logo">
             <h1 style="font-family: Luckiest Guy, cursive;">IAM System</h1>
         </div>
         <div class="search-container">
@@ -143,7 +221,7 @@ mysqli_close($conn);
                 <!-- Add more medical-specific links here -->
             <?php elseif ($department === "Finance"): ?>
                 <li><a href="finance/finance_dashboard.php">Finance Dashboard</a></li>
-                <li><a href="finance/all_staff.php">All Staff</a></li>
+                <li>><a href="all_staff.php">All Staff</a></li>
                 <li><a href="financial_reports.php">Financial Reports</a>
                 <ul class="sub-menu">
                         <li><a href="finance_document.php">Download Financial Reports</a></li>
@@ -159,6 +237,25 @@ mysqli_close($conn);
             <?php endif; ?>
         </ul>
     </nav>
+    </div>
+
+        <!-- Container for document upload form -->
+        <div class="container">
+        <h2>Upload Finance Document</h2>
+        <?php
+        if (isset($success_message)) {
+            echo "<p style='color: green;'>" . $success_message . "</p>";
+        } elseif (isset($error_message)) {
+            echo "<p style='color: red;'>" . $error_message . "</p>";
+        }
+        ?>
+        <form method="post" enctype="multipart/form-data">
+            <div>
+                <label for="document">Document:</label>
+                <input type="file" id="document" name="document" required>
+            </div>
+            <button type="submit">Upload Document</button>
+        </form>
     </div>
 
 </body>
