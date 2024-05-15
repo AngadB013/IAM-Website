@@ -36,7 +36,7 @@ function measureNavigationTime() {
 // Count number of warn log and error log
 function countEntries() {
   // Fetch log file using Fetch API
-  fetch("get_log.php")
+  fetch("get_error_log.php")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -77,7 +77,7 @@ function countEntries() {
 
 // Fetch the latest timestamp from the log file
 function fetchLatestTimestamp() {
-  fetch("get_log.php")
+  fetch("get_error_log.php")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
