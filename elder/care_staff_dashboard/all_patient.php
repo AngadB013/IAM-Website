@@ -111,7 +111,7 @@ mysqli_close($conn);
     padding: 12px; /* Add padding */
     text-align: left; /* Align text left */
     font-size: 14px; /* Font size */
-    color: #666666; /* Text color */
+    color: #1b1cec; /* Text color */
 }
 
 /* Styles for table row on hover */
