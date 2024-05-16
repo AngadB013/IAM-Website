@@ -77,7 +77,7 @@ mysqli_close($conn);
 
     <header>
         <div class="logo-container">
-            <img src="../admin_dashboard/../logo1.png" alt="Logo" class="logo">
+            <img src="/elder/admin_dashboard/logo1.png" alt="Logo" class="logo">
             <h1 style="font-family: Luckiest Guy, cursive;">IAM System</h1>
         </div>
         <div class="search-container">
