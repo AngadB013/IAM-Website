@@ -16,4 +16,5 @@ Features -
  10. All logged in users, on the website are shown on top of the navbar.
  11. Care Staff will get to view different dasboard as per their departments.
  12. Medical department can access medical records of patients, upload, delete the medical documents and also manage the patients only.
- 13. Finance department can access the finance documents only. 
+ 13. Finance department can access the finance documents only.
+ 14. Check threat monitoring of the site, through CPU performance, internet traffic, log monitor of the site.
