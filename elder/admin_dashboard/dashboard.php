@@ -100,7 +100,7 @@
             <a href="userauth.php"><h3>Visitor access</h3></a>
         </div>
         <div class="card">
-            <a href="user_authentication/userauth.php"><h3>User Authentication</h3></a>
+            <a href="user_authentication/userauth.php"><h3>User Management</h3></a>
         </div>
         <div class="card">
             <a href="http://localhost/phpmyadmin/index.php?route=/server/privileges&db=aged_care_db&checkprivsdb=aged_care_db&viewing_mode=db"><h3>Authorisation</h3></a>
