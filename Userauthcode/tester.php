@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pswd = "";
-$dbnm = "userauth";
+$dbnm = "aged_care_db";
 
 $dbConnect = mysqli_connect($host, $user, $pswd,
 $dbnm);
