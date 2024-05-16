@@ -48,7 +48,8 @@
     <?php
     require_once ("settings.php");
 //database connector
-    $dbConnect = @mysqli_connect($host, $user, $pswd, $dbnm)
+
+    $dbConnect = mysqli_connect("localhost", "root", "", "aged_care_db")
     or die("<p>Unable to connect to the database server.</p>"
     . "<p>Error code " . mysqli_connect_errno()
     . ": " . mysqli_connect_error() . "</p>");
