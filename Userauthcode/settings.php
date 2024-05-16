@@ -12,7 +12,7 @@
 $host = "localhost";
 $user = "root" ; // your user name
 $pswd = ""; // your password d(date of birth – ddmmyy)
-$dbnm = "userauth"; // your database
+$dbnm = "aged_care_db"; // your database
 ?>
 </body>
 </html>
