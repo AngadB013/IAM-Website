@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Function to fetch and populate log table based on log level and date range
   function populateLogTable(logLevel, startDate, endDate) {
     // Fetch log file using Fetch API
-    fetch('get_log.php')
+    fetch('get_error_log.php')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
