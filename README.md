@@ -3,6 +3,8 @@ Group - Monday G2
 
 This is an IAM system developed for age care facilities.
 
+The code of the website can be found in the elder folder.
+
 Features - 
  1. Fully responsive front-end age care department website for customers.
  2. Database developed 
@@ -18,3 +20,4 @@ Features -
  12. Medical department can access medical records of patients, upload, delete the medical documents and also manage the patients only.
  13. Finance department can access the finance documents only.
  14. Check threat monitoring of the site, through CPU performance, internet traffic, log monitor of the site.
+ 15. Developed user authentication feature, where users will receive an email with code to enter into the system. (It is still not integrated into the system)
